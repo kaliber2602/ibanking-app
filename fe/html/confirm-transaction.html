@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Xác nhận thanh toán</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/fe/css/dashboard.css" />
+  </head>
+  <body class="bg-light">
+    <div class="container py-5">
+      <h2 class="mb-4 text-center">Xác nhận thanh toán học phí</h2>
+      <div class="card mx-auto" style="max-width: 500px">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Thông tin người dùng</h5>
+          <ul class="list-group mb-3">
+            <li class="list-group-item"><b>Họ và tên:</b> <span id="userFullName"></span></li>
+            <li class="list-group-item"><b>Email:</b> <span id="userEmail"></span></li>
+            <li class="list-group-item"><b>Số dư tài khoản:</b> <span id="userBalance"></span></li>
+          </ul>
+
+          <h5 class="card-title mb-3">Thông tin sinh viên</h5>
+          <ul class="list-group mb-3">
+            <li class="list-group-item"><b>Mã số sinh viên:</b> <span id="studentId"></span></li>
+            <li class="list-group-item"><b>Họ và tên:</b> <span id="studentFullName"></span></li>
+            <li class="list-group-item"><b>Lớp:</b> <span id="studentClass"></span></li>
+            <li class="list-group-item"><b>Số tiền cần đóng học phí:</b> <span id="studentTuition"></span></li>
+          </ul>
+
+          <div class="mb-3"><b>Ngày xác nhận:</b> <span id="confirmDate"></span></div>
+
+          <!-- Khung nhập OTP nằm trong cùng container -->
+          <div id="otpSection" style="display: none;">
+            <label for="otpInput" class="form-label">Nhập mã OTP:</label>
+            <input type="text" id="otpInput" class="form-control mb-2" />
+            <button class="btn btn-success w-100" id="verifyOtpBtn">Xác nhận OTP</button>
+          </div>
+
+          <!-- Cụm nút xác nhận -->
+          <div class="d-flex justify-content-end gap-2 mt-3">
+            <button class="btn btn-secondary" onclick="window.history.back()">Quay lại</button>
+            <button class="btn btn-primary" id="confirmBtn">Xác nhận thanh toán</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal quy định -->
+    <div class="modal fade" id="ruleModal" tabindex="-1" aria-labelledby="ruleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ruleModalLabel">Quy định giao dịch</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+          </div>
+          <div class="modal-body">
+            Sau khi xác nhận, hệ thống sẽ gửi mã OTP đến email của bạn. Bạn cần nhập đúng mã OTP để hoàn tất giao dịch. Mã OTP có hiệu lực trong 5 phút.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="button" class="btn btn-primary" id="agreeBtn">Đồng ý</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/fe/js/confirm-transaction.js"></script>
+  </body>
+</html>
