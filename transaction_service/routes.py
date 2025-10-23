@@ -7,7 +7,7 @@ router = APIRouter()
 
 TRANSACTION_SERVICE_URL = "http://localhost/ibanking-app/be/php-backend/transaction.php"
 GET_TRANS_INFO_URL = "http://localhost/ibanking-app/be/php-backend/get-trans-infor.php"
-CONFIRM_PAYMENT_URL = "http://localhost/ibanking-app/be/php-backend/process-transaction.php" #sua cho nay 
+CONFIRM_PAYMENT_URL = "http://localhost/ibanking-app/be/php-backend/process-transaction.php" 
 
 # get transactions history
 @router.post("/transactions")
@@ -39,7 +39,7 @@ async def get_trans_info(payload: TransInfoRequest):
 async def confirm_payment(payload: ConfirmPaymentRequest):
     try:
         async with httpx.AsyncClient() as client:
-            resp = await client.post(CONFIRM_PAYMENT_URL, json=payload.dict(), timeout=3.0)
+            resp = await client.post(CONFIRM_PAYMENT_URL, json=payload.dict(), timeout=10.0)
             result = resp.json()
     except httpx.RequestError as e:
         return JSONResponse(content={"success": False, "message": f"Lỗi kết nối Gateway Service: {str(e)}"}, status_code=500)

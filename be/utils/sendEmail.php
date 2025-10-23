@@ -57,6 +57,7 @@
                 __DIR__ . '/fe/img/hehe.jpg',
                 __DIR__ . '/fe/img/hehe2.jpg'
             ];
+            
             $imgIndex = rand(0, 1);
             $imgPath = $imgFiles[$imgIndex];
             $cid = 'randomimg' . uniqid();
@@ -89,4 +90,3 @@
             return false;
         }
     }
-?>

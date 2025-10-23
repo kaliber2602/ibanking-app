@@ -4,7 +4,7 @@ require_once '../db/db.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 $username     = trim($data['username'] ?? '');
-$newPassword  = $data['newPassword'] ?? '';
+$newPassword  = $data['new_password'] ?? '';
 
 if (!$username || !$newPassword) {
     echo json_encode([
@@ -23,9 +23,10 @@ if (strlen($newPassword) < 8) {
 }
 
 try {
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
     $stmt = $conn->prepare("UPDATE Customer SET password = :password WHERE username = :username");
     $stmt->execute([
-        'password' => $newPassword,
+        'password' => $hashedPassword,
         'username' => $username
     ]);
 
@@ -46,3 +47,4 @@ try {
         'message' => 'Lỗi hệ thống: ' . $e->getMessage()
     ]);
 }
+?>

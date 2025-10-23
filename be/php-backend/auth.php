@@ -6,6 +6,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 $username = trim($data['username'] ?? '');
 $password = $data['password'] ?? '';
 
+
 if (!$username || !$password) {
     echo json_encode([
         'success' => false,
@@ -24,7 +25,7 @@ try {
             'success' => false,
             'message' => 'Không tìm thấy tài khoản.'
         ]);
-    } elseif ($user['password'] !== $password) {
+    } elseif (!password_verify($password, $user['password'])) {
         echo json_encode([
             'success' => false,
             'message' => 'Sai mật khẩu.'
@@ -41,3 +42,4 @@ try {
         'message' => 'Lỗi hệ thống: ' . $e->getMessage()
     ]);
 }
+?>

@@ -63,11 +63,11 @@ CREATE TABLE Payment
         VALUES
             (
                 '523h0094',
-                '12345678',
+                '$2y$10$PBDkchOgyc1A7g8cgIIJu.WKSMidpWc6JZJAp/VXRB4aDM.Moco.y',
                 'Nguyen Van A',
                 '0912345678',
                 '523H0094@student.tdtu.edu.vn',
-                5000000
+                1000000000
 );
 
         -- Thêm thông tin học phí cần nộp cho sinh viên này vào bảng Payment
@@ -85,12 +85,3 @@ CREATE TABLE Payment
 );
 
         -- Thêm một giao dịch thanh toán mẫu
-        INSERT INTO Transaction
-            (username, payment_id, amount, status)
-        VALUES
-            (
-                '523h0094',
-                1,
-                3500000,
-                'success'
-);

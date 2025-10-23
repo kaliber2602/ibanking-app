@@ -1,7 +1,9 @@
 let generatedToken = "";
 let otpExpires = 0;
 let userEmail = "";
+let username = ""; // ✅ Khai báo toàn cục để dùng xuyên suốt
 
+// Xử lý form nhập username
 document.getElementById("usernameForm").addEventListener("submit", async function (e) {
     e.preventDefault();
     username = document.getElementById("username").value.trim();
@@ -37,6 +39,7 @@ document.getElementById("usernameForm").addEventListener("submit", async functio
             errorDiv.style.display = "block";
             return;
         }
+
         alert("Email của bạn là: " + emailResult.email);
         userEmail = emailResult.email;
 
@@ -54,7 +57,6 @@ document.getElementById("usernameForm").addEventListener("submit", async functio
             return;
         }
 
-        // Lưu token và thời gian hết hạn để xác minh sau
         generatedToken = otpResult.token;
         otpExpires = otpResult.expires;
 
@@ -68,12 +70,14 @@ document.getElementById("usernameForm").addEventListener("submit", async functio
     }
 });
 
-
+// Xử lý form nhập OTP
 document.getElementById("otpForm").addEventListener("submit", async function (e) {
     e.preventDefault();
     const otp = document.getElementById("otp").value.trim();
     const otpMsg = document.getElementById("otpMessage");
+
     alert("Verifying OTP: " + otp + " for email: " + userEmail + " with token: " + generatedToken + " expiring at: " + otpExpires);
+
     try {
         const verifyResp = await fetch("http://localhost:8003/verify-otp", {
             method: "POST",
@@ -87,6 +91,7 @@ document.getElementById("otpForm").addEventListener("submit", async function (e)
         });
         const verifyResult = await verifyResp.json();
         alert(JSON.stringify(verifyResult));
+
         if (verifyResult.success) {
             otpMsg.textContent = "OTP xác thực thành công! Bạn có thể đặt lại mật khẩu.";
             otpMsg.className = "text-success mt-2";
@@ -96,16 +101,22 @@ document.getElementById("otpForm").addEventListener("submit", async function (e)
                 <form id="resetPasswordForm">
                   <div class="mb-3">
                     <label for="newPassword" class="form-label">Nhập mật khẩu mới</label>
-                    <input type="password" class="form-control" id="newPassword" placeholder="Mật khẩu mới" required />
+                    <input type="password" class="form-control" id="newPassword" placeholder="Mật khẩu mới" required autocomplete="new-password" />
                   </div>
                   <button type="submit" class="btn btn-success w-100">Đặt lại mật khẩu</button>
                   <div id="resetMsg" class="mt-2"></div>
                 </form>
               `;
+
                 document.getElementById("resetPasswordForm").addEventListener("submit", function (e) {
                     e.preventDefault();
                     const newPass = document.getElementById("newPassword").value.trim();
                     const resetMsg = document.getElementById("resetMsg");
+
+                    console.log("Đang gửi yêu cầu đặt lại mật khẩu với:");
+                    console.log("username:", username);
+                    console.log("new_password:", newPass);
+
                     if (newPass.length < 8) {
                         resetMsg.textContent = "Mật khẩu phải tối thiểu 8 ký tự.";
                         resetMsg.className = "text-danger mt-2";
@@ -114,28 +125,27 @@ document.getElementById("otpForm").addEventListener("submit", async function (e)
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
-                                username: username, // đảm bảo biến username được lưu từ trước
-                                newPassword: newPass
+                                username: username,
+                                new_password: newPass
                             })
                         })
-                            .then(res => res.json())
-                            .then(result => {
-                                if (result.success) {
-                                    resetMsg.textContent = "Đổi mật khẩu thành công!";
-                                    resetMsg.className = "text-success mt-2";
-                                    // Điều hướng về trang chủ sau 1 giây
-                                    setTimeout(() => {
-                                        window.location.href = "/";
-                                    }, 1000);
-                                } else {
-                                    resetMsg.textContent = result.message || "Không thể đổi mật khẩu.";
-                                    resetMsg.className = "text-danger mt-2";
-                                }
-                            })
-                            .catch(() => {
-                                resetMsg.textContent = "Lỗi kết nối máy chủ.";
+                        .then(res => res.json())
+                        .then(result => {
+                            if (result.success) {
+                                resetMsg.textContent = "Đổi mật khẩu thành công!";
+                                resetMsg.className = "text-success mt-2";
+                                setTimeout(() => {
+                                    window.location.href = "/";
+                                }, 1000);
+                            } else {
+                                resetMsg.textContent = result.message || "Không thể đổi mật khẩu.";
                                 resetMsg.className = "text-danger mt-2";
-                            });
+                            }
+                        })
+                        .catch(() => {
+                            resetMsg.textContent = "Lỗi kết nối máy chủ.";
+                            resetMsg.className = "text-danger mt-2";
+                        });
                     }
                 });
             }, 1000);

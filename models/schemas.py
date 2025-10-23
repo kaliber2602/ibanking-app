@@ -14,8 +14,6 @@ class OTPRequest(BaseModel):
     token: str
     expires: int
 
-
-
 class EmailRequest(BaseModel):
     email: str
 
@@ -27,7 +25,6 @@ class TransInfoRequest(BaseModel):
     username: str
     student_id: str
     
-# demo
 class ConfirmPaymentRequest(BaseModel):
     username: str
     student_id: str

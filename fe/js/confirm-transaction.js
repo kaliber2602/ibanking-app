@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Bước 3: Xử lý sự kiện xác nhận
     document.getElementById('confirmBtn').onclick = function () {
-      document.getElementById('confirmBtn').disabled = true; // ✅ Ngăn click lại
+      document.getElementById('confirmBtn').disabled = true; // Ngăn click lại
 
       const ruleModal = new bootstrap.Modal(document.getElementById('ruleModal'));
       ruleModal.show();
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           generatedToken = otpResult.token;
           otpExpires = otpResult.expires;
 
-          // ✅ Hiển thị phần nhập OTP ngay dưới nút
+          // Hiển thị phần nhập OTP ngay dưới nút
           document.getElementById('otpSection').style.display = 'block';
 
           // Bước 5: Xác minh OTP
@@ -103,19 +103,29 @@ document.addEventListener('DOMContentLoaded', async function () {
             alert('Xác minh OTP thành công!');
             alert("Đang xử lý giao dịch...");
 
+            // Bước 6: Xác nhận giao dịch
             const confirmRes = await fetch('http://localhost:8004/confirm-payment', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 username,
                 student_id: student.student_id,
-                payment_id: student.payment_id,
                 amount: student.amount,
-                note: "Thanh toán học phí"
               })
             });
+            // 
+            const rawText = await confirmRes.text();
+            console.log("Raw response:", rawText);
 
-            const confirmResult = await confirmRes.json();
+            let confirmResult;
+            try {
+              confirmResult = JSON.parse(rawText);
+            } catch (e) {
+              alert("Lỗi phân tích JSON từ FastAPI: " + e.message);
+              return;
+            }
+
+              // 
             if (confirmRes.ok && confirmResult.success) {
               alert(confirmResult.message || 'Giao dịch thành công.');
               window.location.href = '/dashboard';
